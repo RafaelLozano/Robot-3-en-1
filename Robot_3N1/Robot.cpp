@@ -107,9 +107,9 @@ char Robot::Leer_BT()
     // Hacer algo con el valor de D1
     Serial.print("Valor de D1: ");
     Serial.println(d1Value);
-  }
 
-  return Estado;
+    return traslateD1(d1Value);
+  }
 }
 void Robot::Inicializar_Robot()
 {
@@ -141,22 +141,23 @@ void Robot::Modo_Bluetooth()
   int Velocidad_Max = 255;
   int Velocidad_Med = 180;
   Estado = Leer_BT();
-  if (Estado == '1')
+
+  if (Estado == '5')
   {
     // Arriba_Izquierda
     Adelante(Velocidad_Med, Velocidad_Max);
   }
-  if (Estado == '2')
+  if (Estado == '1')
   {
     // Derecho
     Adelante(Velocidad_Max, Velocidad_Max);
   }
-  if (Estado == '3')
+  if (Estado == '7')
   {
     // Arriba_Derecha
     Adelante(Velocidad_Max, Velocidad_Med);
   }
-  if (Estado == '4')
+  if (Estado == '3')
   {
     // Girar a la izquierda
     Motor_2.Adelante(Velocidad_Max);
@@ -166,23 +167,23 @@ void Robot::Modo_Bluetooth()
   {
     // Serial.println("Logo talos");
   }
-  if (Estado == '6')
+  if (Estado == '4')
   {
     // Girar a la derecha
     Motor_2.Atras(Velocidad_Max);
     Motor_1.Adelante(Velocidad_Max);
   }
-  if (Estado == '7')
+  if (Estado == '6')
   {
     // Abajo Izquierda
     Atras(Velocidad_Med, Velocidad_Max);
   }
-  if (Estado == '8')
+  if (Estado == '2')
   {
     // Reversa
     Atras(Velocidad_Max, Velocidad_Max);
   }
-  if (Estado == '9')
+  if (Estado == '8')
   {
     // Abajo Derecha
     Atras(Velocidad_Max, Velocidad_Med);
