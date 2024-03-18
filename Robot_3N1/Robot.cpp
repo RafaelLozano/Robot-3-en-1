@@ -1,3 +1,6 @@
+// 1 seguidor de linea
+// 2 evasor de obstaculos
+// s swsdxc Amodo bluetooth
 #include "Robot.h"
 #include <Arduino.h> //Permite utilizar los comandos de Arduino
 #include <SoftwareSerial.h>
@@ -38,6 +41,10 @@ void Motor::Stop()
 }
 int parseD1Value(String json)
 {
+  if(json == 's'){
+    Serial.println("STOP");
+    return 'w';
+  }
   int d1Value = 0;
   int pos = json.indexOf("\"D1\":"); // Encontrar la posición donde comienza la clave "D1"
   if (pos != -1)
@@ -87,26 +94,20 @@ char traslateD1(int d1Value)
   {
     Estado = '9';
   }
-  if (d1Value == 0)
-  {
-    Estado = 'w';
-  }
+ 
   return Estado;
 }
 
 char Robot::Leer_BT()
 {
   if (Bluetooth.available())
-  {                                               // Si hay datos disponibles para leer desde el módulo Bluetooth
+  {
+    if(Bluetooth.read() == 's'){
+      return 'w';
+    }
+    // Si hay datos disponibles para leer desde el módulo Bluetooth
     String data = Bluetooth.readStringUntil('}'); // Leer los datos hasta que se reciba un salto de línea (\n)
-    Serial.println(data);                         // Imprimir los datos recibidos en el puerto serie de la computadora
-
-    // Analizar los datos JSON
     int d1Value = parseD1Value(data);
-
-    // Hacer algo con el valor de D1
-    Serial.print("Valor de D1: ");
-    Serial.println(d1Value);
 
     return traslateD1(d1Value);
   }
@@ -142,22 +143,22 @@ void Robot::Modo_Bluetooth()
   int Velocidad_Med = 180;
   Estado = Leer_BT();
 
-  if (Estado == '5')
+  if (Estado == '6')
   {
     // Arriba_Izquierda
     Adelante(Velocidad_Med, Velocidad_Max);
   }
-  if (Estado == '1')
+  if (Estado == '3')
   {
     // Derecho
     Adelante(Velocidad_Max, Velocidad_Max);
   }
-  if (Estado == '7')
+  if (Estado == '8')
   {
     // Arriba_Derecha
     Adelante(Velocidad_Max, Velocidad_Med);
   }
-  if (Estado == '3')
+  if (Estado == '1')
   {
     // Girar a la izquierda
     Motor_2.Adelante(Velocidad_Max);
@@ -167,23 +168,23 @@ void Robot::Modo_Bluetooth()
   {
     // Serial.println("Logo talos");
   }
-  if (Estado == '4')
+  if (Estado == '2')
   {
     // Girar a la derecha
     Motor_2.Atras(Velocidad_Max);
     Motor_1.Adelante(Velocidad_Max);
   }
-  if (Estado == '6')
+  if (Estado == '7')
   {
     // Abajo Izquierda
     Atras(Velocidad_Med, Velocidad_Max);
   }
-  if (Estado == '2')
+  if (Estado == '4')
   {
     // Reversa
     Atras(Velocidad_Max, Velocidad_Max);
   }
-  if (Estado == '8')
+  if (Estado == '9')
   {
     // Abajo Derecha
     Atras(Velocidad_Max, Velocidad_Med);
