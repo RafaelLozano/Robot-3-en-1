@@ -94,6 +94,7 @@ char traslateD1(int d1Value)
   {
     Estado = '9';
   }
+  
  
   return Estado;
 }
@@ -102,14 +103,29 @@ char Robot::Leer_BT()
 {
   if (Bluetooth.available())
   {
-    if(Bluetooth.read() == 's'){
+    char _command = Bluetooth.read();
+    Serial.println(_command);
+  
+    if(_command == '1'){
+      return 'a';
+    }
+    if(_command == 's'){
       return 'w';
     }
-    // Si hay datos disponibles para leer desde el módulo Bluetooth
+    if(_command == '2'){
+      return 'c';
+    }
+    if(_command == '{'){
+      // Si hay datos disponibles para leer desde el módulo Bluetooth
     String data = Bluetooth.readStringUntil('}'); // Leer los datos hasta que se reciba un salto de línea (\n)
     int d1Value = parseD1Value(data);
-
+    Serial.print("data: ");
+    Serial.println(data);
+    Serial.println(d1Value);
     return traslateD1(d1Value);
+      
+    }
+    
   }
 }
 void Robot::Inicializar_Robot()
@@ -136,7 +152,7 @@ void Robot::Stop()
   Motor_2.Stop();
 }
 
-void Robot::Modo_Bluetooth()
+char Robot::Modo_Bluetooth()
 {
   int Estado;
   int Velocidad_Max = 255;
@@ -148,57 +164,58 @@ void Robot::Modo_Bluetooth()
     // Arriba_Izquierda
     Adelante(Velocidad_Med, Velocidad_Max);
   }
-  if (Estado == '3')
+  else if (Estado == '3')
   {
     // Derecho
     Adelante(Velocidad_Max, Velocidad_Max);
   }
-  if (Estado == '8')
+  else if (Estado == '8')
   {
     // Arriba_Derecha
     Adelante(Velocidad_Max, Velocidad_Med);
   }
-  if (Estado == '1')
+  else if (Estado == '1')
   {
     // Girar a la izquierda
     Motor_2.Adelante(Velocidad_Max);
     Motor_1.Atras(Velocidad_Max);
   }
-  if (Estado == '5')
+  else if (Estado == '5')
   {
     // Serial.println("Logo talos");
   }
-  if (Estado == '2')
+  else if (Estado == '2')
   {
     // Girar a la derecha
     Motor_2.Atras(Velocidad_Max);
     Motor_1.Adelante(Velocidad_Max);
   }
-  if (Estado == '7')
+  else if (Estado == '7')
   {
     // Abajo Izquierda
     Atras(Velocidad_Med, Velocidad_Max);
   }
-  if (Estado == '4')
+  else if (Estado == '4')
   {
     // Reversa
     Atras(Velocidad_Max, Velocidad_Max);
   }
-  if (Estado == '9')
+  else if (Estado == '9')
   {
     // Abajo Derecha
     Atras(Velocidad_Max, Velocidad_Med);
   }
-  if (Estado == 'w')
+  else if (Estado == 'w')
   {
     Stop();
   }
+  return Estado;
 }
 
 void Robot::Modo_Evasor(int Dis_giro)
 {
-  int Distancia;
   Distancia = sonar.Obtener_Distancia();
+  Serial.println(Distancia);
   if (Distancia <= Dis_giro)
   {
     // Girar a la derecha
@@ -209,7 +226,10 @@ void Robot::Modo_Evasor(int Dis_giro)
   else
   {
     Adelante(255, 255);
+    delay(100);
   }
+  
+  
 }
 void Robot::Modo_Seguidor()
 {

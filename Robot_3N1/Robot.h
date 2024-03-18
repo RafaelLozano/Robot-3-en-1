@@ -35,6 +35,7 @@ class Robot
   Motor Motor_2;
   SoftwareSerial Bluetooth; // RX, TX
   Sensor_ultrasonico_HCSR04 sonar;
+  int Distancia;
   
   public:
   Sensor Sensor_1;
@@ -44,11 +45,8 @@ class Robot
   void Adelante(int Velocidad_1,int Velocidad_2);
   void Atras(int Velocidad_1,int Velocidad_2);
   void Stop();
-  void Modo_Bluetooth();
+  char Modo_Bluetooth();
   char Leer_BT();
   void Modo_Evasor(int Dis_giro);
   void Modo_Seguidor();
 };
-
-
-
