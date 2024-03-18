@@ -46,18 +46,18 @@ void setup()
 }
 
 void loop()
-{ 
+{
   menu = Robot.Modo_Bluetooth();
   switch (menu)
   {
 
-    case 'a':
+  case 'a':
     Robot.Modo_Seguidor();
-      
-      break;
 
-    case 'c':
-      Robot.Modo_Evasor(25);//25cm=Distancia del obstaculo
-      break;
+    break;
+
+  case 'c':
+    Robot.Modo_Evasor(25); // 25cm=Distancia del obstaculo
+    break;
   }
 }

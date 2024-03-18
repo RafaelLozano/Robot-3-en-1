@@ -41,8 +41,8 @@ void Motor::Stop()
 }
 int parseD1Value(String json)
 {
-  if(json == 's'){
-    Serial.println("STOP");
+  if (json == 's')
+  {
     return 'w';
   }
   int d1Value = 0;
@@ -94,8 +94,7 @@ char traslateD1(int d1Value)
   {
     Estado = '9';
   }
-  
- 
+
   return Estado;
 }
 
@@ -104,28 +103,26 @@ char Robot::Leer_BT()
   if (Bluetooth.available())
   {
     char _command = Bluetooth.read();
-    Serial.println(_command);
-  
-    if(_command == '1'){
+
+    if (_command == '1')
+    {
       return 'a';
     }
-    if(_command == 's'){
+    if (_command == 's')
+    {
       return 'w';
     }
-    if(_command == '2'){
+    if (_command == '2')
+    {
       return 'c';
     }
-    if(_command == '{'){
+    if (_command == '{')
+    {
       // Si hay datos disponibles para leer desde el módulo Bluetooth
-    String data = Bluetooth.readStringUntil('}'); // Leer los datos hasta que se reciba un salto de línea (\n)
-    int d1Value = parseD1Value(data);
-    Serial.print("data: ");
-    Serial.println(data);
-    Serial.println(d1Value);
-    return traslateD1(d1Value);
-      
+      String data = Bluetooth.readStringUntil('}'); // Leer los datos hasta que se reciba un salto de línea (\n)
+      int d1Value = parseD1Value(data);
+      return traslateD1(d1Value);
     }
-    
   }
 }
 void Robot::Inicializar_Robot()
@@ -180,10 +177,6 @@ char Robot::Modo_Bluetooth()
     Motor_2.Adelante(Velocidad_Max);
     Motor_1.Atras(Velocidad_Max);
   }
-  else if (Estado == '5')
-  {
-    // Serial.println("Logo talos");
-  }
   else if (Estado == '2')
   {
     // Girar a la derecha
@@ -215,7 +208,7 @@ char Robot::Modo_Bluetooth()
 void Robot::Modo_Evasor(int Dis_giro)
 {
   Distancia = sonar.Obtener_Distancia();
-  Serial.println(Distancia);
+
   if (Distancia <= Dis_giro)
   {
     // Girar a la derecha
@@ -228,8 +221,6 @@ void Robot::Modo_Evasor(int Dis_giro)
     Adelante(255, 255);
     delay(100);
   }
-  
-  
 }
 void Robot::Modo_Seguidor()
 {
